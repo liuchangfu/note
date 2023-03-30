@@ -44,8 +44,6 @@ def parse_token(token: str = Depends(oauth_scame)):
     except JWTError:
         raise token_exception
     return id
-
-
 ```
 
 # 密码加密
@@ -63,7 +61,6 @@ def get_md5_pwd(pwd: str):
 
 if __name__ == '__main__':
     print(get_md5_pwd('123456'))
-
 ```
 
 # #  接口调用
@@ -103,5 +100,8 @@ def Login(request: Request, user: OAuth2PasswordRequestForm = Depends(), db: Ses
         content = {"code": 500, "msg": "用户名或密码错误"}
         return JSONResponse(content=content)
 
-
+@app.get("/get_user", tags=["首页模块"])
+def get_user(id: str = Depends(token.parse_token), db: Session = Depends(get_db)):
+    user = get_user_by_id(db, int(id))
+    return {"code": 200, "msg": "查询成功", "user": user}
 ```
