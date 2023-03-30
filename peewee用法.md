@@ -260,9 +260,25 @@ class Person(Model):
 #     XUser.create(phone='184738373833332323232', password='123456')
 
 
+# 复合条件
+# 逻辑符    含义    样例
+# &    and    Person.select().where((Person.Name == '张三') & (Person.Age == 30))
+# |    or    Person.select().where((Person.Name == '张三')|(Person.Age==30))
+# ~    not    Person.select().where(~Person.Name == '张三')
 
+# 比较运算符
 
+# 运算符    含义    运算符    含义
+# ==    等于    !=    不等于
+# <    小于    <=< td="">    小于等于
+# >    大于    >=    大于等于
+# <<    x in y，其中 y 是列表或查询    >>    x is y, 其中 y 可以是 None
+# %    x like y    **    x like y
 
+# st8 = StudentsInfo.select().where(StudentsInfo.english_sore>StudentsInfo.chinese_sore)
+# st8 = User.select().where(User.username % '%子%') 
+# st8 = User.select().where(User.username % 'zhang*')  区分大小写
+# st8 = User.select().where(User.username ** 'zhang*')  不区分大小
 
 # coding=utf-8
 """
