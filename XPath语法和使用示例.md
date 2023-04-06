@@ -1,4 +1,4 @@
-## [XPath](https://so.csdn.net/so/search?q=XPath&spm=1001.2101.3001.7020)语法和使用示例
+## XPath语法和使用示例
 
 ## 选取节点
 
