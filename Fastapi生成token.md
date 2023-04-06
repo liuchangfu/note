@@ -7,9 +7,13 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 
+# 密码加密对象
 crypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# 可以导入secrets模块，调用secrets.token_urlsafe(32)方法生成，其中32是指的SECRET_KEY的长度
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 
+# 加密方式
 ALGORITHM = "HS256"
 
 
@@ -29,7 +33,8 @@ def create_token(data: dict, expire_time):
     return token
 
 
-oauth_scame = OAuth2PasswordBearer(tokenUrl="login")  # post请求，相对  /login
+# post请求，相对  /login
+oauth_scame = OAuth2PasswordBearer(tokenUrl="login")  
 
 
 # token校验
@@ -87,7 +92,6 @@ def Login(request: Request, user: OAuth2PasswordRequestForm = Depends(), db: Ses
         ret_token = token.create_token({"sub": str(user.id)}, expire_time)
 
         # 4.返回token及用户信息
-
         # 日期格式需要转成字符串
         ret_user = {"username": user.username, "avatar": user.avatar, "ip": user.ip,
                     "last_login_date": user.last_login_date.strftime("%Y-%m-%d")}
@@ -108,4 +112,4 @@ def get_user(id: str = Depends(token.parse_token), db: Session = Depends(get_db)
 
 
 
-(https://www.cnblogs.com/CharmCode/p/14191112.htmlJWT)[token认证登陆]
+[token认证登陆](https://www.cnblogs.com/CharmCode/p/14191112.htmlJWT)
