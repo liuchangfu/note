@@ -1,0 +1,16 @@
+{"date": null, "monthly_sales": null, "share_manufacturers": null, "sales_ranking_month": null, "maker_ranking": null, "ranking_compact_cars": null}
+{"date": "2023-03", "monthly_sales": "3204", "share_manufacturers": "7.67%", "sales_ranking_month": "134", "maker_ranking": "4", "ranking_compact_cars": "30"}
+{"date": "2023-02", "monthly_sales": "3623", "share_manufacturers": "10.13%", "sales_ranking_month": "115", "maker_ranking": "4", "ranking_compact_cars": "27"}
+{"date": "2023-01", "monthly_sales": "4645", "share_manufacturers": "11.54%", "sales_ranking_month": "97", "maker_ranking": "4", "ranking_compact_cars": "25"}
+{"date": "2022-12", "monthly_sales": "6897", "share_manufacturers": "11.81%", "sales_ranking_month": "100", "maker_ranking": "2", "ranking_compact_cars": "25"}
+{"date": "2022-11", "monthly_sales": "3965", "share_manufacturers": "8.46%", "sales_ranking_month": "148", "maker_ranking": "4", "ranking_compact_cars": "34"}
+{"date": "2022-10", "monthly_sales": "9230", "share_manufacturers": "14.53%", "sales_ranking_month": "74", "maker_ranking": "3", "ranking_compact_cars": "21"}
+{"date": "2022-09", "monthly_sales": "7998", "share_manufacturers": "11.60%", "sales_ranking_month": "93", "maker_ranking": "3", "ranking_compact_cars": "22"}
+{"date": "2022-08", "monthly_sales": "8075", "share_manufacturers": "8.38%", "sales_ranking_month": "79", "maker_ranking": "4", "ranking_compact_cars": "19"}
+{"date": "2022-07", "monthly_sales": "8475", "share_manufacturers": "11.25%", "sales_ranking_month": "80", "maker_ranking": "5", "ranking_compact_cars": "18"}
+{"date": "2022-06", "monthly_sales": "6664", "share_manufacturers": "9.12%", "sales_ranking_month": "104", "maker_ranking": "5", "ranking_compact_cars": "28"}
+{"date": "2022-05", "monthly_sales": "6603", "share_manufacturers": "14.27%", "sales_ranking_month": "81", "maker_ranking": "4", "ranking_compact_cars": "21"}
+{"date": "2022-04", "monthly_sales": "3860", "share_manufacturers": "16.20%", "sales_ranking_month": "73", "maker_ranking": "3", "ranking_compact_cars": "20"}
+{"date": "2022-03", "monthly_sales": "6868", "share_manufacturers": "9.05%", "sales_ranking_month": "82", "maker_ranking": "4", "ranking_compact_cars": "21"}
+{"date": "2022-02", "monthly_sales": "5014", "share_manufacturers": "8.84%", "sales_ranking_month": "85", "maker_ranking": "4", "ranking_compact_cars": "22"}
+{"date": "2022-01", "monthly_sales": "9215", "share_manufacturers": "11.91%", "sales_ranking_month": "72", "maker_ranking": "4", "ranking_compact_cars": "18"}

@@ -1,0 +1,20 @@
+Thread-3|2023-04-07 15:03:21,562|request.py|get_response|line:351|DEBUG| 
+                -------------- AirSpiderTest.parse request for ----------------
+                url  = https://chaping.chayu.com/
+                method = GET
+                args = {'timeout': 22, 'stream': True, 'verify': False, 'headers': {'User-Agent': 'Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2225.0 Safari/537.36'}}
+                
+Thread-3|2023-04-07 15:03:22,345|test_chayu_spider.py|parse|line:36|INFO| [<Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/709" class="fl" target="_blank">[剡茗茶业社]越乡龙井 特级</a><span class="fr"><em>9.6</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/3266" class="fl" target="_blank">[斗记茶业]巅峰之斗2016</a><span class="fr"><em>9.6</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/387" class="fl" target="_blank">[祥源茶]金色庄园系列·伍·祁红工夫</a><span class="fr"><em>9.5</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/2344" class="fl" target="_blank">[孝文家茶]牛首（2016）</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/3239" class="fl" target="_blank">[斗记茶业]金斗（2016）</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/2023" class="fl" target="_blank">[孝文家茶]牛肉（2015）</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/726" class="fl" target="_blank">[强氏茗茶]雨前特级南京雨花茶</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/67" class="fl" target="_blank">[王德传]冻顶乌龙</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/1002" class="fl" target="_blank">[华祥苑]宫廷清香安溪铁观音</a><span class="fr"><em>9.4</em>分</span></li>'>, <Selector xpath='//ul[@class="con"]/li' data='<li><a href="https://chaping.chayu.com/tea/828" class="fl" target="_blank">[二三两]白牡丹（2014）</a><span class="fr"><em>9.4</em>分</span></li>'>]
+Thread-3|2023-04-07 15:03:22,351|test_chayu_spider.py|parse|line:37|INFO| 10
+Thread-3|2023-04-07 15:03:22,352|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/709,[剡茗茶业社]越乡龙井 特级,9.6分
+Thread-3|2023-04-07 15:03:22,354|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/3266,[斗记茶业]巅峰之斗2016,9.6分
+Thread-3|2023-04-07 15:03:22,355|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/387,[祥源茶]金色庄园系列·伍·祁红工夫,9.5分
+Thread-3|2023-04-07 15:03:22,356|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/2344,[孝文家茶]牛首（2016）,9.4分
+Thread-3|2023-04-07 15:03:22,358|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/3239,[斗记茶业]金斗（2016）,9.4分
+Thread-3|2023-04-07 15:03:22,359|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/2023,[孝文家茶]牛肉（2015）,9.4分
+Thread-3|2023-04-07 15:03:22,360|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/726,[强氏茗茶]雨前特级南京雨花茶,9.4分
+Thread-3|2023-04-07 15:03:22,361|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/67,[王德传]冻顶乌龙,9.4分
+Thread-3|2023-04-07 15:03:22,362|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/1002,[华祥苑]宫廷清香安溪铁观音,9.4分
+Thread-3|2023-04-07 15:03:22,363|test_chayu_spider.py|parse|line:42|INFO| https://chaping.chayu.com/tea/828,[二三两]白牡丹（2014）,9.4分
+Thread-3|2023-04-07 15:03:23,378|parser_control.py|run|line:480|DEBUG| 等待任务...
+AirSpiderTest|2023-04-07 15:03:26,600|air_spider.py|run|line:113|INFO| 爬虫被停止
