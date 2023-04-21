@@ -8,7 +8,7 @@
  """
 import json
 import time
-
+from feapder.utils.log import log
 import feapder
 from feapder import Item
 from feapder.pipelines import BasePipeline
@@ -24,7 +24,7 @@ class FeapderAirSpider(feapder.AirSpider):
         ITEM_PIPELINES=[
             # "feapder.pipelines.mysql_pipeline.MysqlPipeline",
             # "feapder.pipelines.mongo_pipeline.MongoPipeline",
-            "feapder_air_spider.Pipeline"
+            "ex_code.Pipeline"
         ],
         # 框架日志等级
         LOG_LEVEL="DEBUG"
@@ -105,7 +105,7 @@ class FeapderAirSpider(feapder.AirSpider):
         :param response:
         :return:
         """
-        print("解析详情 " + response.url)
+        log.info(f"解析详情:{response.url}")
 
     def start_callback(self):
         """
@@ -125,7 +125,7 @@ class FeapderAirSpider(feapder.AirSpider):
         """
 
         self.end_time = time.time()
-        print("耗时 {}".format(self.end_time - self.start_time))
+        log.info(f"耗时 {self.end_time - self.start_time}")
 
 
 class Pipeline(BasePipeline):
@@ -141,7 +141,8 @@ class Pipeline(BasePipeline):
 
         """
         for item in items:
-            print(item)
+            log.info(f'{item}')
+            log.info(f'{table}')
             with open(f"{table}.txt", "a") as file:
                 file.write(json.dumps(item, ensure_ascii=False) + "\n")
 
