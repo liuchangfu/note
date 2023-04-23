@@ -13,6 +13,7 @@ from items import *
 from feapder.pipelines import BasePipeline
 from feapder import Item
 import csv
+import pandas as pd
 
 
 class Jincongxing(feapder.AirSpider):
@@ -109,14 +110,21 @@ class Pipeline(BasePipeline):
         #         file.write(json.dumps(item, ensure_ascii=False) + "\n")
 
         # 保存为CSV文件
-        with open(f'./csv/{table}.csv', 'w', newline='') as file:
-            fieldnames = ['date', 'monthly_sales', 'share_manufacturers', 'sales_ranking_month', 'maker_ranking',
-                          'ranking_compact_cars']
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            # 写入表头
-            writer.writeheader()
-            # 写入数据
-            writer.writerows(items[1:])
+        # with open(f'./csv/{table}.csv', 'w', newline='') as file:
+        #     fieldnames = ['date', 'monthly_sales', 'share_manufacturers', 'sales_ranking_month', 'maker_ranking',
+        #                   'ranking_compact_cars']
+        #     writer = csv.DictWriter(file, fieldnames=fieldnames)
+        #     # 写入表头
+        #     writer.writeheader()
+        #     # 写入数据
+        #     writer.writerows(items[1:])
+
+        df = pd.DataFrame(items[1:],
+                          columns=['date', 'monthly_sales', 'share_manufacturers', 'sales_ranking_month',
+                                   'maker_ranking',
+                                   'ranking_compact_cars'], dtype=str)
+        log.info(df)
+        df.to_csv(f'./csv/{table}.csv')
         return True
 
 
