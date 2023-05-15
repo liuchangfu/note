@@ -32,5 +32,3 @@ df = pd.DataFrame(items[1:],columns=['date', 'monthly_sales', 'share_manufacture
 log.info(df)
 df.to_csv(f'./csv/{table}.csv')
 ```
-
-

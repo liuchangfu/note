@@ -22,6 +22,11 @@ def get_hash_pwd(pwd: str):
     return crypt_context.hash(pwd)
 
 
+def verify_password(password: str, hashed_password: str) -> bool:
+    """ 验证明文密码 与 加密后的密码 是否一致 """
+    return crypt_context.verify(password, hashed_password)
+
+
 # 生成token:用户数据，token过期时间
 def create_token(data: dict, expire_time):
     if expire_time:
@@ -109,7 +114,5 @@ def get_user(id: str = Depends(token.parse_token), db: Session = Depends(get_db)
     user = get_user_by_id(db, int(id))
     return {"code": 200, "msg": "查询成功", "user": user}
 ```
-
-
 
 [token认证登陆](https://www.cnblogs.com/CharmCode/p/14191112.htmlJWT)
