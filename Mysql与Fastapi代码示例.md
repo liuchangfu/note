@@ -89,17 +89,19 @@ def update_time_and_ip(db: Session, user_id: int, login_date: datetime.datetime,
 
 ## 接口代码
 
-    @router.get("/user_list", tags=["用户模块"])
-    def get_user_list(page_size: int, current_page: int, id: str = Depends(token.parse_token),
-                      db: Session = Depends(get_db)):
-        users = get_user_pagenation(db, page_size, current_page)
-        total = get_user_total(db)
-        departments = get_departments(db)
-        content = {
-            "departments": departments,
-            "users": users,
-            "pageSize": page_size,
-            "pageTotal": total,
-            "currentPage": current_page
-        }
-        return content
+```python
+@router.get("/user_list", tags=["用户模块"])
+def get_user_list(page_size: int, current_page: int, id: str = Depends(token.parse_token),
+                  db: Session = Depends(get_db)):
+    users = get_user_pagenation(db, page_size, current_page)
+    total = get_user_total(db)
+    departments = get_departments(db)
+    content = {
+        "departments": departments,
+        "users": users,
+        "pageSize": page_size,
+        "pageTotal": total,
+        "currentPage": current_page
+    }
+    return content
+```

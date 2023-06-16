@@ -95,7 +95,6 @@ def Login(request: Request, user: OAuth2PasswordRequestForm = Depends(), db: Ses
         # 3.token生成
         expire_time = timedelta(minutes=EXPIRE_MINUTE)
         ret_token = token.create_token({"sub": str(user.id)}, expire_time)
-
         # 4.返回token及用户信息
         # 日期格式需要转成字符串
         ret_user = {"username": user.username, "avatar": user.avatar, "ip": user.ip,
