@@ -212,3 +212,9 @@ class HeroUpdate(SQLModel):
     secret_name: Optional[str] = None
     age: Optional[int] = None
 ```
+
+如创建数据库报如下错：`sqlalchemy.exc.InvalidRequestError: Table 'heroinfo' is already defined for this MetaData instance.`
+
+在模型中添加这一句`__table_args__ = {'extend_existing': True}`
+
+
