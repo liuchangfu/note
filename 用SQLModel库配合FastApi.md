@@ -4,8 +4,6 @@
 
 ![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2023-06-16-16-42-04-image.png)
 
-
-
 crud.py
 
 ```python
@@ -73,12 +71,22 @@ db.py
 @date：2023/6/16 15:47
  """
 from sqlmodel import create_engine, SQLModel, Session
-
+# sqlite_db
 sqlite_file_name = "HeroInfo.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
-
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+
+# mysql
+username = "root"
+pwd = "lcfwku"
+host = "localhost"
+port = "3306"
+db_name = "share_system"
+
+url = f"mysql+pymysql://{username}:{pwd}@{host}:{port}/{db_name}?charset=utf8"
+
+Engin = create_engine(url)
 
 
 def create_db_and_tables():
@@ -88,7 +96,6 @@ def create_db_and_tables():
 def get_session():
     with Session(engine) as session:
         yield session
-
 ```
 
 main.py
@@ -164,7 +171,6 @@ def delete_hero(*, session: Session = Depends(get_session), hero_id: int):
 
 if __name__ == '__main__':
     uvicorn.run('main:app', host="0.0.0.0", port=8000)
-
 ```
 
 model.py
@@ -205,5 +211,4 @@ class HeroUpdate(SQLModel):
     name: Optional[str] = None
     secret_name: Optional[str] = None
     age: Optional[int] = None
-
 ```
