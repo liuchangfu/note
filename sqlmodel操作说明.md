@@ -580,8 +580,6 @@ if __name__ == '__main__':
 
 在模型中添加这一句`__table_args__ = {'extend_existing': True}`
 
-
-
 查询
 
 ```python
@@ -592,23 +590,28 @@ if __name__ == '__main__':
    # 查询name为"Rusty-Man"且age为48的记录
   statement = select(Hero).where(and_(Hero.name == "Rusty-Man", Hero.age == 48))
   # 查询age大于等于35，或者大于90的
-  select(Hero).where(or_(Hero.age <= 35, Hero.age > 90))
+  statement = select(Hero).where(or_(Hero.age <= 35, Hero.age > 90))
   # 查询age大于等35且小于40的记录
-  select(Hero).where(Hero.age >= 35, Hero.age < 40)
+  statement = select(Hero).where(Hero.age >= 35, Hero.age < 40)
   # 查询name不等于Deadpond的记录
-  select(Hero).where(Hero.name != "Deadpond")
+  statement = select(Hero).where(Hero.name != "Deadpond")
   # 查询age大于35的记录，小于同理
-  select(Hero).where(Hero.age > 35)
+  statement = select(Hero).where(Hero.age > 35)
   # 查询age大于等于35的记录，小于等于同理
-  select(Hero).where(Hero.age >= 35)
+  statement = select(Hero).where(Hero.age >= 35)
   # 正好一行
-  session.exec(select(Hero).where(Hero.name == "Deadpond")).one()
+  statement = session.exec(select(Hero).where(Hero.name == "Deadpond")).one()
   # 读取一行
   session.exec(select(Hero).where(Hero.name == "Deadpond")).first()
   # 查询ID为1的记录，如果没有,则返回None
-  session.get(Hero1, 1)
+  statement = session.get(Hero1, 1)
   # offset,limit
-  select(Hero).where(Hero.age >= 35, Hero.age < 40).offset(10).limit(100)
+  statement = select(Hero).where(Hero.age >= 35, Hero.age < 40).offset(10).limit(100)
+  # 两个表查询
+  statement = select(Hero, Team).where(Hero.team_id == Team.id)
+  # 连接
+  statement = select(Hero, Team).join(Team)
+  statement = select(Hero).join(Team).where(Team.name == "Preventers")
+  # 左连接
+  statement = select(Hero, Team).join(Team, isouter=True)
 ```
-
-
