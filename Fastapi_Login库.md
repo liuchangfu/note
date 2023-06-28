@@ -38,7 +38,6 @@ class Settings(BaseSettings):
 
 
 DEFAULT_SETTINGS = Settings(_env_file=".env")
-
 ```
 
 # db_action.py
@@ -75,7 +74,6 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
-
 ```
 
 # app.py
@@ -134,5 +132,4 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run("app:app")
-
 ```

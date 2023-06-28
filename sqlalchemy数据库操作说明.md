@@ -1,49 +1,59 @@
 # 1.更新数据，先查询出数据，再更新相关字段
 
-    # 启用停用
-    def active(db: Session, id: int, state: int):
-        user = db.query(User).filter(User.id == id).first()
-        user.state = state
-        db.commit()
-        db.flush()
+```python
+# 启用停用
+def active(db: Session, id: int, state: int):
+    user = db.query(User).filter(User.id == id).first()
+    user.state = state
+    db.commit()
+    db.flush()
+```
 
 # 2.删除数据，先查询出数据，再删除
 
-    # 根据用户id删除用户
-    def delete_user_by_id(db: Session, id: int):
-        user = db.query(User).filter(User.id == id).first()
-        db.delete(user)
-        db.commit()
-        db.flush()
+```python
+# 根据用户id删除用户
+def delete_user_by_id(db: Session, id: int):
+    user = db.query(User).filter(User.id == id).first()
+    db.delete(user)
+    db.commit()
+    db.flush()
+```
 
 # 3.添加数据，直接操作模型
 
-    # 添加
-    def add_user(db: Session, username: str, pwd: str, avatar: str, department_name: str, addr: str, state: int):
-        department = db.query(Department).filter(Department.name == department_name).first()
-        user = User(username=username, pwd=pwd, avatar="/" + avatar, addr=addr, state=state, dep_id=department.id)
-        db.add(user)
-        db.commit()
-        db.flush()
+```python
+# 添加
+def add_user(db: Session, username: str, pwd: str, avatar: str, department_name: str, addr: str, state: int):
+    department = db.query(Department).filter(Department.name == department_name).first()
+    user = User(username=username, pwd=pwd, avatar="/" + avatar, addr=addr, state=state, dep_id=department.id)
+    db.add(user)
+    db.commit()
+    db.flush()
+```
 
 # 4.查询数据
 
-    # 获取用户信息，获取用户id,用户头像等信息
-    def get_user_by_username_and_pwd(db: Session, username: str, md5_pwd: str) -> User:
-        user = db.query(User.id, User.username, User.avatar, User.ip, User.last_login_date, User.state).filter(
-            User.username == username, User.pwd == md5_pwd).first()
-        return user
+```python
+# 获取用户信息，获取用户id,用户头像等信息
+def get_user_by_username_and_pwd(db: Session, username: str, md5_pwd: str) -> User:
+    user = db.query(User.id, User.username, User.avatar, User.ip, User.last_login_date, User.state).filter(
+        User.username == username, User.pwd == md5_pwd).first()
+    return user
+```
 
 # 5.创建模型
 
-    from sqlalchemy import Column, ForeignKey, Integer, String
-    
-    from .db import Base
-    
-    class User(Base):  # 必须继承declaraive_base得到的那个基类
-         __tablename__ = "user"
-    
-         id = Column(Integer, primary_key=True, index=True)
+```python
+from sqlalchemy import Column, ForeignKey, Integer, String
+
+from .db import Base
+
+class User(Base):  # 必须继承declaraive_base得到的那个基类
+     __tablename__ = "user"
+
+     id = Column(Integer, primary_key=True, index=True)
+```
 
 # 6.说明
 
@@ -122,25 +132,27 @@ class Address(Base):
 
 # 10 多对多
 
-    class Class(Base):
-        __tablename__ = 'class'
-        class_id = Column(Integer, primary_key=True)
-        name = Column(String(20), nullable=False)
-        class_teacher = relationship('ClassTeacher', backref='class')
-    
-    
-    class Teacher(Base):
-        __tablename__ = 'teacher'
-        teacher_id = Column(Integer, primary_key=True)
-        name = Column(String(20), nullable=False)
-        teacher_class = relationship('ClassTeacher', backref='teacher')
-    
-    
-    class ClassTeacher(Base):
-        __tablename__ = 'class_teacher'  # 这就是所谓的一张视图表,没有实际存在数据，但是凭借关系型数据库的特点可以体现出一些数据关系
-        teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'), primary_key=True)
-        class_id = Column(Integer, ForeignKey('class.class_id'), primary_key=True)
-        # 这张第三表中有两个主键，表示不能有class_id和teacher_id都相同的两项
+```python
+class Class(Base):
+    __tablename__ = 'class'
+    class_id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    class_teacher = relationship('ClassTeacher', backref='class')
+
+
+class Teacher(Base):
+    __tablename__ = 'teacher'
+    teacher_id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    teacher_class = relationship('ClassTeacher', backref='teacher')
+
+
+class ClassTeacher(Base):
+    __tablename__ = 'class_teacher'  # 这就是所谓的一张视图表,没有实际存在数据，但是凭借关系型数据库的特点可以体现出一些数据关系
+    teacher_id = Column(Integer, ForeignKey('teacher.teacher_id'), primary_key=True)
+    class_id = Column(Integer, ForeignKey('class.class_id'), primary_key=True)
+    # 这张第三表中有两个主键，表示不能有class_id和teacher_id都相同的两项
+```
 
 判断记录是否存在，可以用count(),如果大于0则不插入，如果等于0，正常插入，程序调用时，如果没有记录存在，则会返None
 https://blog.csdn.net/qq_27371025/article/details/127862190
