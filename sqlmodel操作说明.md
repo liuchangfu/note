@@ -599,6 +599,9 @@ if __name__ == '__main__':
   statement = select(Hero).where(Hero.age > 35)
   # 查询age大于等于35的记录，小于等于同理
   statement = select(Hero).where(Hero.age >= 35)
+  # 查询en_name以C开头
+  session.exec(
+        select(PlayList).where(PlayList.en_name.like('C%')).offset(offset).limit(limit)).all()
   # 正好一行
   statement = session.exec(select(Hero).where(Hero.name == "Deadpond")).one()
   # 读取一行
@@ -614,4 +617,7 @@ if __name__ == '__main__':
   statement = select(Hero).join(Team).where(Team.name == "Preventers")
   # 左连接
   statement = select(Hero, Team).join(Team, isouter=True)
+  # 升序或降序
+  session.exec(
+        select(TeamData).where(TeamData.team == team).order_by(TeamData.season.desc())
 ```
