@@ -621,3 +621,263 @@ if __name__ == '__main__':
   session.exec(
         select(TeamData).where(TeamData.team == team).order_by(TeamData.season.desc())
 ```
+
+
+
+# 例1--外键
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: sqlmodel_project
+@Author：Liuchangfu
+@file： sqlmodle_test08.py
+@date：2023/7/24 11:55
+ """
+
+from typing import Optional, List
+
+from sqlmodel import Field, SQLModel, create_engine, Session, select, Relationship
+
+
+class Author(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    books: List['Book'] = Relationship(back_populates="author")
+
+
+class Book(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    book_name: str = Field(index=True)
+    author_id: Optional[int] = Field(default=None, foreign_key="author.id")
+    author: Optional[Author] = Relationship(back_populates="books")
+
+
+sqlite_file_name = "test009.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+
+engine = create_engine(sqlite_url, echo=True)
+
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+def drop_db_and_tables():
+    SQLModel.metadata.drop_all(engine)
+
+
+def create_authors():
+    with Session(engine) as session:
+        author1 = Author(name="Alex")
+        author2 = Author(name="Tom")
+        author3 = Author(name="Danel")
+        session.add(author1)
+        session.add(author2)
+        session.add(author3)
+        session.commit()
+
+        book1 = Book(book_name="Python", author=author1)
+        book2 = Book(book_name="Java入门到放弃", author=author2)
+        book3 = Book(book_name="HTML必知必会", author=author3)
+        session.add(book1)
+        session.add(book2)
+        session.add(book3)
+        session.commit()
+
+        book4 = Book(book_name="CSS必知必会")
+        book5 = Book(book_name="JS必知必会")
+        author4 = Author(name="June", books=[book4, book5])
+        session.add(author4)
+        session.commit()
+
+
+if __name__ == '__main__':
+    drop_db_and_tables()
+    create_db_and_tables()
+    create_authors()
+
+```
+
+
+
+# 例子2--一对多
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: 主机管理API
+@Author：Liuchangfu
+@file： sqlmode_test06.py
+@date：2023/6/15 16:48
+ """
+from typing import List, Optional
+from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
+
+
+class HeroTeamLink(SQLModel, table=True):
+    team_id: Optional[int] = Field(default=None, foreign_key="team.id", primary_key=True)
+    hero_id: Optional[int] = Field(default=None, foreign_key="hero.id", primary_key=True)
+
+
+class Team(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    headquarters: str
+    heroes: List["Hero"] = Relationship(back_populates="teams", link_model=HeroTeamLink)
+
+
+class Hero(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    secret_name: str
+    age: Optional[int] = Field(default=None, index=True)
+    teams: List[Team] = Relationship(back_populates="heroes", link_model=HeroTeamLink)
+
+
+sqlite_file_name = "database_many_to_many.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+engine = create_engine(sqlite_url, echo=True)
+
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+def create_heroes():
+    with Session(engine) as session:
+        team_preventers = Team(name="Preventers", headquarters="Sharp Tower")  # Preventers的ID为1
+        team_z_force = Team(name="Z-Force", headquarters="Sister Margaret’s Bar")  # Z-Force的ID为2
+
+        hero_deadpond = Hero(name="Deadpond", secret_name="Dive Wilson",
+                             teams=[team_z_force, team_preventers], )  # Deadpond的id=1，关联的teams的id分别为1，2
+        hero_rusty_man = Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48,
+                              teams=[team_preventers], )  # Rusty-Man的id=2，关联的teams的id为2
+        hero_spider_boy = Hero(name="Spider-Boy", secret_name="Pedro Parqueador",
+                               teams=[team_preventers])  # Spider-Boy的id=3，关联的teams的id为2
+        session.add(hero_deadpond)
+        session.add(hero_rusty_man)
+        session.add(hero_spider_boy)
+        session.commit()
+
+        session.refresh(hero_deadpond)
+        session.refresh(hero_rusty_man)
+        session.refresh(hero_spider_boy)
+
+        print("Deadpond:", hero_deadpond)
+        print("Deadpond teams:", hero_deadpond.teams)
+        print("Rusty-Man:", hero_rusty_man)
+        print("Rusty-Man Teams:", hero_rusty_man.teams)
+        print("Spider-Boy:", hero_spider_boy)
+        print("Spider-Boy Teams:", hero_spider_boy.teams)
+
+
+def update_heroes():
+    with Session(engine) as session:
+        hero_spider_boy = session.exec(
+            select(Hero).where(Hero.name == "Spider-Boy")
+        ).one()
+        team_z_force = session.exec(select(Team).where(Team.name == "Z-Force")).one()
+
+        team_z_force.heroes.append(hero_spider_boy)
+        session.add(team_z_force)
+        session.commit()
+
+        print("Updated Spider-Boy's Teams:", hero_spider_boy.teams)
+        print("Z-Force heroes:", team_z_force.heroes)
+
+        hero_spider_boy.teams.remove(team_z_force)
+        session.add(team_z_force)
+        session.commit()
+
+        print("Reverted Z-Force's heroes:", team_z_force.heroes)
+        print("Reverted Spider-Boy's teams:", hero_spider_boy.teams)
+
+
+def main():
+    # create_db_and_tables()
+    # create_heroes()
+    update_heroes()
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+# 例子3-多对多
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: sqlmodel_project
+@Author：Liuchangfu
+@file： sqlmodle_test10.py
+@date：2023/7/24 14:51
+ """
+from typing import Optional, List
+
+from sqlmodel import Field, SQLModel, create_engine, Session, select, Relationship
+
+
+class AuthorLinkBook(SQLModel, table=True):
+    author_id: Optional[int] = Field(default=None, foreign_key="author.id", primary_key=True)
+    book_id: Optional[int] = Field(default=None, foreign_key="book.id", primary_key=True)
+
+
+class Author(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    books: List['Book'] = Relationship(back_populates="author", link_model=AuthorLinkBook)
+
+
+class Book(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    book_name: str = Field(index=True)
+    author: List[Author] = Relationship(back_populates="books", link_model=AuthorLinkBook)
+
+
+sqlite_file_name = "test10.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+
+engine = create_engine(sqlite_url, echo=True)
+
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+def drop_db_and_tables():
+    SQLModel.metadata.drop_all(engine)
+
+
+def create_authors():
+    with Session(engine) as session:
+        author1 = Author(name="Alex")
+        author2 = Author(name="Tom")
+        author3 = Author(name="Danel")
+        session.add(author1)
+        session.add(author2)
+        session.add(author3)
+        session.commit()
+
+        book1 = Book(book_name="Python", author=[author1])
+        book2 = Book(book_name="Java入门到放弃", author=[author2])
+        book3 = Book(book_name="HTML必知必会", author=[author3])
+        book4 = Book(book_name="CSS必知必会", author=[author1, author2])
+        session.add(book1)
+        session.add(book2)
+        session.add(book3)
+        session.add(book4)
+        session.commit()
+
+
+if __name__ == '__main__':
+    drop_db_and_tables()
+    create_db_and_tables()
+    create_authors()
+
+```
