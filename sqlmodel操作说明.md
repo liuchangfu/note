@@ -883,56 +883,71 @@ if __name__ == '__main__':
 @IDE：PyCharm
 @project: sqlmodel_project
 @Author：Sam Lau
-@file： sqlmodel_test07.py
-@date：2023/6/20 15:56
+@file： sqlmodle_test12.py
+@date：2023/7/26 10:10
  """
+from datetime import datetime
 from typing import List, Optional
-from sqlmodel import Field, Relationship, SQLModel, create_engine
+from sqlmodel import Field, Relationship, SQLModel, create_engine, Session
 
 
-class Weapon(SQLModel, table=True):
+class CategoryLinkArticle(SQLModel, table=True):
+    # 文章与分类中间表
+    article_id: int = Field(default=None, foreign_key="article.id", primary_key=True)
+    category_id: int = Field(default=None, foreign_key="category.id", primary_key=True)
+
+
+class TagLinkArticle(SQLModel, table=True):
+    # 文章与标签中间表
+    article_id: int = Field(default=None, foreign_key="article.id", primary_key=True)
+    tag_id: int = Field(default=None, foreign_key="tags.id", primary_key=True)
+
+
+class Base(SQLModel):
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    hero: "Hero" = Relationship(back_populates="weapon")
 
 
-class Power(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    hero_id: int = Field(foreign_key="hero.id")
-    hero: "Hero" = Relationship(back_populates="powers")
+class User(Base, table=True):
+    username: str = Field(index=True)
+    # 用户可以发表多个文章
+    articles: List['Article'] = Relationship(back_populates="user")
 
 
-class Team(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    headquarters: str
-    heroes: List["Hero"] = Relationship(back_populates="team")
+class Category(Base, table=True):
+    category_name: str = Field(index=True)
+    # 文章可以有多个分类，一个分类也可以有多个文章
+    articles: List['Article'] = Relationship(back_populates="category", link_model=CategoryLinkArticle)
 
 
-class Hero(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
-
-    team_id: Optional[int] = Field(default=None, foreign_key="team.id")
-    team: Optional[Team] = Relationship(back_populates="heroes")
-
-    weapon_id: Optional[int] = Field(default=None, foreign_key="weapon.id")
-    weapon: Optional[Weapon] = Relationship(back_populates="hero")
-
-    power_id: Optional[int] = Field(default=None, foreign_key="power.id")
-    powers: List[Power] = Relationship(back_populates="hero")
+class Tags(Base, table=True):
+    tag_name: str = Field(index=True)
+    # 文章可以有多个标签，一个标签也可以有多个文章
+    articles: List['Article'] = Relationship(back_populates="tags", link_model=TagLinkArticle)
 
 
-sqlite_file_name = "sqlmodel_test07.db"
+class Article(Base, table=True):
+    title: str = Field(index=True)
+    post_date: datetime = Field(default_factory=datetime.now)
+
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    user: Optional[User] = Relationship(back_populates="articles")
+    # todo 要设置多对多关系表？
+    # 文章分类与文章属于多对多关系，一个对文章有多个个分类，一个分类也可以有多个文章
+    category: List[Category] = Relationship(back_populates="articles", link_model=CategoryLinkArticle)
+    # 文章标签与文章属于多对多关系，一个文章有多少个文章标签，一个标签也可以有多个文章
+    tags: List[Tags] = Relationship(back_populates="articles", link_model=TagLinkArticle)
+
+
+
+
+sqlite_file_name = "sqlmodel_test12.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(sqlite_url, echo=True)
 
 
 def create_db_and_tables():
+    SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
 
 
@@ -940,7 +955,43 @@ def main():
     create_db_and_tables()
 
 
+def create_articles():
+    with Session(engine) as session:
+        user1 = User(username="Sam")
+        user2 = User(username="Alex")
+        user3 = User(username="Tom")
+        session.add_all([user1, user2, user3])
+        session.commit()
+
+        category1 = Category(category_name="Python")
+        category2 = Category(category_name="Java")
+        category3 = Category(category_name="CSS")
+        session.add_all([category1, category2, category3])
+        session.commit()
+
+        tag1 = Tags(tag_name="Python")
+        tag2 = Tags(tag_name="前端")
+        tag3 = Tags(tag_name="后端")
+        session.add_all([tag1, tag2, tag3])
+        session.commit()
+
+        article1 = Article(title="Python大法", user_id=user1.id, category=[category1], tags=[tag1])
+        article2 = Article(title="Django介绍", user_id=user2.id, category=[category1, category2], tags=[tag1, tag2])
+        article3 = Article(title="Vus.js介绍", user_id=user3.id, category=[category1, category2, category3],
+                           tags=[tag1, tag2, tag3])
+        session.add_all([article1, article2, article3])
+        # session.add(article1)
+        session.commit()
+
+
 if __name__ == "__main__":
     main()
+    create_articles()
+ate_db_and_tables()
+
+
+if __name__ == "__main__":
+    main()
+
 
 ```
