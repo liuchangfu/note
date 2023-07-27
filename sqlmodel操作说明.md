@@ -915,13 +915,15 @@ class User(Base, table=True):
 
 class Category(Base, table=True):
     category_name: str = Field(index=True)
-    # 文章可以有多个分类，一个分类也可以有多个文章
+    # 文章可以有多个分类，一个分类也可以有多个文章, 通过back_populates="category"关联到Article模型中的category字段，通过link_model=CategoryLinkArticle
+    # 生成分类与文章多对多关系表
     articles: List['Article'] = Relationship(back_populates="category", link_model=CategoryLinkArticle)
 
 
 class Tags(Base, table=True):
     tag_name: str = Field(index=True)
-    # 文章可以有多个标签，一个标签也可以有多个文章
+    # 文章可以有多个标签，一个标签也可以有多个文章，通过back_populates="tags"关联到Article模型中的tags字段，通过link_model=TagLinkArticle
+    # 生成标签与文章多对多关系表
     articles: List['Article'] = Relationship(back_populates="tags", link_model=TagLinkArticle)
 
 
@@ -932,9 +934,11 @@ class Article(Base, table=True):
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     user: Optional[User] = Relationship(back_populates="articles")
     # todo 要设置多对多关系表？
-    # 文章分类与文章属于多对多关系，一个对文章有多个个分类，一个分类也可以有多个文章
+    # 文章分类与文章属于多对多关系，一个对文章有多个个分类，一个分类也可以有多个文章，通过back_populates="articles"关联到Category模型中的articles字段
+    # 通过link_model=CategoryLinkArticle生成分类与文章多对多关系表
     category: List[Category] = Relationship(back_populates="articles", link_model=CategoryLinkArticle)
-    # 文章标签与文章属于多对多关系，一个文章有多少个文章标签，一个标签也可以有多个文章
+    # 文章标签与文章属于多对多关系，一个文章有多少个文章标签，一个标签也可以有多个文章，通过back_populates="tags"关联到Tags模型中的articles字段
+    # 通过link_model=TagLinkArticle生成标签与文章多对多关系表
     tags: List[Tags] = Relationship(back_populates="articles", link_model=TagLinkArticle)
 
 
@@ -992,6 +996,4 @@ ate_db_and_tables()
 
 if __name__ == "__main__":
     main()
-
-
 ```
