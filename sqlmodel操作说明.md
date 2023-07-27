@@ -988,12 +988,7 @@ def create_articles():
         session.commit()
 
 
-if __name__ == "__main__":
-    main()
-    create_articles()
-ate_db_and_tables()
 
 
-if __name__ == "__main__":
-    main()
+
 ```
