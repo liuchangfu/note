@@ -312,3 +312,181 @@ register_tortoise(
     add_exception_handlers=True,
 )
 ```
+
+数据模型例子
+
+```python
+class Post(models.Model):
+    """岗位表"""
+    id = fields.CharField(max_length=50, pk=True)
+    name = fields.CharField(max_length=32, null=False, default="")
+
+class Department(AbstractDefaultColumn):
+    """部门表"""
+    id = fields.CharField(max_length=50, pk=True)
+    name = fields.CharField(max_length=64, help_text='部门名')
+
+class User(models.Model):
+    """用户表"""
+    id = fields.IntField(pk=True)
+    name = fields.CharField(max_length=32, index=True)
+    phone_no = fields.CharField(max_length=32, unique=True)
+    email = fields.CharField(max_length=32, null=True)
+    department = fields.ForeignKeyField("cp_model.Department", on_delete=fields.SET_NULL, null=True,
+                                        related_name="depart_users", help_text='所属部门')
+    post = fields.ForeignKeyField("cp_model.Post", on_delete=fields.SET_NULL, null=True, related_name="post_users",
+                                  help_text='岗位')
+
+class ForumArticle(AbstractDefaultColumn):
+    """文章"""
+    id = fields.IntField(pk=True)
+    user = fields.ForeignKeyField("cp_model.User", on_delete=fields.CASCADE)
+    title = fields.CharField(max_length=32, default='', null=True)  # 文章标题
+    content = fields.TextField(default='', null=True, blank=True)  # 文章正文
+    tags = fields.ManyToManyField('cp_model.ArticleTag', related_name='tags_article',
+                                  through="cp_forum_article_tags",
+                                  forward_key="cp_tag_id",
+                                  backward_key="cp_forum_article_id"
+                                  )  # 标签
+
+    posters = fields.ManyToManyField("cp_model.CPImage", related_name="posters_article",
+                                     through="cp_forum_article_posters",
+                                     forward_key="cp_image_id",
+                                     backward_key="cp_forum_article_id"
+                                     )
+
+class ArticleComment(AbstractDefaultColumn):
+    """评论"""
+    id = fields.IntField(pk=True)
+    user = fields.ForeignKeyField("cp_model.User", related_name="user_comments", on_delete=fields.CASCADE)
+    to_user_id = fields.IntField(default=0)  # 回复用户的id
+    to_user_name = fields.CharField(max_length=32, default="", null=True, blank=True)  # 回复用户的name
+    article = fields.ForeignKeyField("cp_model.ForumArticle", on_delete=fields.SET_NULL, null=True,
+                                     related_name="article_comments")
+
+class ArticleUpvoteRecord(AbstractDefaultColumn):
+    """用户论坛文章的点赞记录"""
+    id = fields.IntField(pk=True)
+    user = fields.ForeignKeyField("cp_model.User", related_name="user_article_upvotes", on_delete=fields.CASCADE)
+    article = fields.ForeignKeyField("cp_model.ForumArticle", related_name="article_upvotes", on_delete=fields.CASCADE)
+  
+```
+
+```python
+# 角色表
+class Role(TimestampMixin):
+    role_name = fields.CharField(max_length=15, description="角色名称")
+    user: fields.ManyToManyRelation["User"] = fields.ManyToManyField("base.User", related_name="role",
+                                                                     on_delete=fields.CASCADE)
+    access: fields.ManyToManyRelation["Access"] = fields.ManyToManyField("base.Access", related_name="role",
+                                                                         on_delete=fields.CASCADE)
+    role_status = fields.BooleanField(default=False, description="True:启用 False:禁用")
+    role_desc = fields.CharField(null=True, max_length=255, description='角色描述')
+
+    class Meta:
+        table_description = "角色表"
+        table = "role"
+# 用户表
+class User(TimestampMixin):
+    role: fields.ManyToManyRelation[Role]
+    username = fields.CharField(unique=True, null=False, min_length=5, max_length=32, description="用户名")
+    password = fields.CharField(null=False,min_length=8,max_length=255)
+    mobile_phone = fields.CharField(unique=True, null=False, description="手机号", max_length=11)
+    email = fields.CharField(unique=True, null=False, description='邮箱', max_length=32)
+    full_name = fields.CharField(null=True, description='姓名', max_length=15)
+    is_activate = fields.BooleanField(default=0, description='0未激活 1正常 2禁用')
+    is_staff = fields.BooleanField(default=False, description="用户类型 True:超级管理员 False:普通管理员")
+    header_img = fields.CharField(null=True, max_length=255, description='用户头像')
+    sex = fields.IntField(default=0, null=True, description='0未知 1男 2女')
+    login_host = fields.CharField(null=True, max_length=15, description="访问IP")
+
+    # 返回用户名默认
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        table_description = "用户表"
+        table = "user"
+        
+# 权限表
+class Access(TimestampMixin):
+    role: fields.ManyToManyRelation[Role]
+    access_name = fields.CharField(max_length=15, description="权限名称")
+    parent_id = fields.IntField(default=0, description='父id')
+    scopes = fields.CharField(unique=True, max_length=255, description='权限范围标识')
+    access_desc = fields.CharField(null=True, max_length=255, description='权限描述')
+    menu_icon = fields.CharField(null=True, max_length=255, description='菜单图标')
+    is_check = fields.BooleanField(default=False, description='是否验证权限 True为验证 False不验证')
+    is_menu = fields.BooleanField(default=False, description='是否为菜单 True菜单 False不是菜单')
+
+    def __str__(self):
+        return self
+
+    class Meta:
+        table_description = "权限表"
+        table = "access"
+```
+
+例子2--多对多关系
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: Article_Api
+@Author：Sam Lau
+@file： models3.py
+@date：2023/8/4 11:28
+ """
+from tortoise import Tortoise, fields, run_async
+from tortoise.models import Model
+
+
+class User(Model):
+    """用户表"""
+    id = fields.IntField(pk=True)
+    name = fields.CharField(max_length=32, index=True)
+    phone_no = fields.CharField(max_length=32, unique=True)
+    email = fields.CharField(max_length=32, null=True)
+
+
+class Tags(Model):
+    """标签表"""
+    article: fields.ManyToManyRelation["Article"]
+    id = fields.CharField(max_length=50, pk=True)
+    tag = fields.CharField(max_length=32, null=False, default="")
+
+
+class Category(Model):
+    """分类表"""
+    article: fields.ManyToManyRelation["Article"]
+    id = fields.CharField(max_length=50, pk=True)
+    category = fields.CharField(max_length=32, null=False, default="")
+
+
+class Article(Model):
+    """文章表"""
+    id = fields.CharField(max_length=50, pk=True)
+    user = fields.ForeignKeyField("models5.User", on_delete=fields.CASCADE, null=True,
+                                  help_text='所属用户')
+    title = fields.CharField(max_length=64, null=False, default="", help_text='文章标题')
+    # 多对多关系定义在多的一方，通过 related_name="article"关联到Category表中的article字段
+    category: fields.ManyToManyRelation["Category"] = fields.ManyToManyField("models5.Category",
+                                                                             related_name="article",
+                                                                             help_text='所属分类')
+    # 多对多关系定义在多的一方，通过 related_name="article"关联到Tags表中的article字段
+    tags: fields.ManyToManyRelation["Tags"] = fields.ManyToManyField("models5.Tags",
+                                                                     related_name="article",
+                                                                     help_text='所属标签')
+    content = fields.TextField(null=False, default="")
+
+
+async def run():
+    await Tortoise.init(db_url="sqlite://models5.db", modules={"models5": ["models.models5"]})
+    await Tortoise.generate_schemas()
+
+
+if __name__ == '__main__':
+    run_async(run())
+
+```

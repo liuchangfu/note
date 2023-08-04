@@ -986,9 +986,4 @@ def create_articles():
         session.add_all([article1, article2, article3])
         # session.add(article1)
         session.commit()
-
-
-
-
-
 ```
