@@ -369,7 +369,6 @@ class ArticleUpvoteRecord(AbstractDefaultColumn):
     id = fields.IntField(pk=True)
     user = fields.ForeignKeyField("cp_model.User", related_name="user_article_upvotes", on_delete=fields.CASCADE)
     article = fields.ForeignKeyField("cp_model.ForumArticle", related_name="article_upvotes", on_delete=fields.CASCADE)
-  
 ```
 
 ```python
@@ -407,7 +406,7 @@ class User(TimestampMixin):
     class Meta:
         table_description = "用户表"
         table = "user"
-        
+
 # 权限表
 class Access(TimestampMixin):
     role: fields.ManyToManyRelation[Role]
@@ -482,11 +481,88 @@ class Article(Model):
 
 
 async def run():
-    await Tortoise.init(db_url="sqlite://models5.db", modules={"models5": ["models.models5"]})
+    await Tortoise.init(db_url="sqlite://models5.db", modules={"models5": ["__main__"]})
     await Tortoise.generate_schemas()
+    user1 = User(name="Sam", phone_no="13551111111", email="Sam@qq.com")
+    await user1.save()
+    user2 = User(name="Alex", phone_no="1352144123333", email="Alex@qq.com")
+    await user2.save()
 
 
 if __name__ == '__main__':
     run_async(run())
-
 ```
+
+# aerich操作说明
+
+[tortoise/aerich: A database migrations tool for TortoiseORM, ready to production. (github.com)](https://github.com/tortoise/aerich)
+
+[Sanic二十二：Sanic + tortoise-orm 之使用aerich执行数据库迁移 - 向前走。 - 博客园](https://www.cnblogs.com/zhongyehai/p/15178096.html)
+
+
+
+1.准备好配置：setting.py
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829163712666-1586939295.png)
+
+```python
+TORTOISE_ORM = {
+    "connections": {"default": "mysql://root:123456@localhost:3306/test?charset=utf8mb4"},  # MySQL
+    # "connections": {"default": "sqlite://db.sqlite3"},  # sqlite
+    "apps": {
+        # 模型分组名字，当需要使用此app下的模型的时候，需使用 此名字.模型名称
+        "test_models": {
+            # 须添加"aerich.models", 此时，会在数据库中生成一个名为aerich的表用于存模型信息，以便以后做脚本迁移
+            "models": ["aerich.models", "user", "project"],  # 模型所在的py文件
+            "default_connection": "default"
+        }
+    }
+}
+```
+
+2.执行aerich初始化：aerich init -t 指定配置  
+`aerich init -t settings.TORTOISE_ORM`
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223535147-787775520.png)
+
+将会在目录下生成空的 migrations 文件夹和 aerich.ini 文件
+
+
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223640463-2008743184.png)
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223655845-1436917880.png)
+
+3.将模型映射到数据库中：`aerich init-db`
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223809686-787803568.png)
+
+此时数据库中就会生成对应的表
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829163806004-232248718.png)
+
+migrations 下将会生成SQL语句
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829164127783-2048884581.png)
+
+4.如果修改了模型则需要重新生成SQL语句，并推送到数据库,重新生成SQL语句：`aerich migrate`
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829164306799-495825022.png)
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829164349201-1343456082.png)
+
+5.新生成的SQL推送到数据库：`aerich upgrade`
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829164413334-1830469606.png)
+
+6.如果要回到上一个版本：`aerich downgrade`
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829164543159-548261616.png)
+
+7.查看历史迁移记录：`aerich history`
+
+8.查看形成当前版本的迁移记录文件：`aerich heads`
+
+9.aerich 除了提供命令行之外，还提供了代码内执行的办法，从aerich引入 Command类即可，提供的方法与命令行一样
+
+![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823224957414-1007760820.png)
