@@ -499,8 +499,6 @@ if __name__ == '__main__':
 
 [Sanic二十二：Sanic + tortoise-orm 之使用aerich执行数据库迁移 - 向前走。 - 博客园](https://www.cnblogs.com/zhongyehai/p/15178096.html)
 
-
-
 1.准备好配置：setting.py
 
 ![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210829163712666-1586939295.png)
@@ -525,9 +523,7 @@ TORTOISE_ORM = {
 
 ![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223535147-787775520.png)
 
-将会在目录下生成空的 migrations 文件夹和 aerich.ini 文件
-
-
+将会在目录下生成空的` migrations` 文件夹和 `aerich.ini` 文件
 
 ![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823223640463-2008743184.png)
 
@@ -566,3 +562,13 @@ migrations 下将会生成SQL语句
 9.aerich 除了提供命令行之外，还提供了代码内执行的办法，从aerich引入 Command类即可，提供的方法与命令行一样
 
 ![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823224957414-1007760820.png)
+
+
+
+```python
+from aerich import Command
+
+command = Command(tortoise_config=config, app='models')
+await command.init()
+await command.migrate('test')
+```
