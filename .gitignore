@@ -1,1 +1,4 @@
 /tests/16888/car_sales/*.csv
+/tests/16888/car_sales/spiders/csv/*.csv
+/tests/air-spider/__pycache__/*.pyc
+/tests/air-spider/*.txt
