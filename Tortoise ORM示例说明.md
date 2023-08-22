@@ -493,6 +493,16 @@ if __name__ == '__main__':
     run_async(run())
 ```
 
+# Tortoise ORM 拓展
+
+###### [tortoise-orm 之Field的参数、属性、方法](https://www.cnblogs.com/zhongyehai/p/15182408.html)
+
+[tortoise-orm 之Model、QuerySet提供的查询方法](https://www.cnblogs.com/zhongyehai/p/15202038.html)
+
+[tortoise-orm 之Q对象 ](https://www.cnblogs.com/zhongyehai/p/15208048.html)
+
+[tortoise-orm 之Model、QuerySet提供的数据操作方法 ](https://www.cnblogs.com/zhongyehai/p/15208134.html)
+
 # aerich操作说明
 
 [tortoise/aerich: A database migrations tool for TortoiseORM, ready to production. (github.com)](https://github.com/tortoise/aerich)
@@ -562,8 +572,6 @@ migrations 下将会生成SQL语句
 9.aerich 除了提供命令行之外，还提供了代码内执行的办法，从aerich引入 Command类即可，提供的方法与命令行一样
 
 ![](https://img2020.cnblogs.com/blog/1406024/202108/1406024-20210823224957414-1007760820.png)
-
-
 
 ```python
 from aerich import Command
