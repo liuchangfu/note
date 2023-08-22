@@ -497,6 +497,8 @@ if __name__ == '__main__':
 
 ###### [tortoise-orm 之Field的参数、属性、方法](https://www.cnblogs.com/zhongyehai/p/15182408.html)
 
+[tortoise-orm 之常用字段类型和参数](https://www.cnblogs.com/zhongyehai/p/15187199.html)
+
 [tortoise-orm 之Model、QuerySet提供的查询方法](https://www.cnblogs.com/zhongyehai/p/15202038.html)
 
 [tortoise-orm 之Q对象 ](https://www.cnblogs.com/zhongyehai/p/15208048.html)
