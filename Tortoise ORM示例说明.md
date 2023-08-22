@@ -493,6 +493,179 @@ if __name__ == '__main__':
     run_async(run())
 ```
 
+# # 例子3-参照Django写法
+
+一对一
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: tortoise_orm_ex
+@Author：Sam Lau
+@file： one_to_one.py
+@date：2023/8/24 17:46
+ """
+from tortoise import fields, run_async, Tortoise
+from tortoise.models import Model
+
+
+class Place(Model):
+    name = fields.CharField(max_length=50)
+    address = fields.CharField(max_length=80)
+
+    def __str__(self):
+        return f"{self.name} the place"
+
+
+class Restaurant(Model):
+    place = fields.OneToOneField(
+        'models.Place',
+        on_delete=fields.CASCADE,
+    )
+    serves_hot_dogs = fields.BooleanField(default=False)
+    serves_pizza = fields.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s the restaurant" % self.place.name
+
+
+class Waiter(Model):
+    restaurant = fields.ForeignKeyField('models.Restaurant', on_delete=fields.CASCADE)
+    name = fields.CharField(max_length=50)
+
+    def __str__(self):
+        return "%s the waiter at %s" % (self.name, self.restaurant)
+
+
+async def run():
+    await Tortoise.init(db_url="sqlite://one_to_one.db", modules={"models": ["__main__"]})
+    await Tortoise.generate_schemas()
+
+    p1 = await Place.create(name="Demon Dogs", address="944 W. Fullerton")
+    p2 = await Place.create(name="Ace Hardware", address="1013 N. Ashland")
+
+    r1 = await Restaurant.create(place=p1, serves_hot_dogs=True, serves_pizza=False)
+    r2 = await Restaurant.create(place=p2, serves_hot_dogs=True, serves_pizza=False)
+
+    w1 = await Waiter.create(restaurant=r1, name="Bob")
+    w2 = await Waiter.create(restaurant=r2, name="Alice")
+
+
+if __name__ == '__main__':
+    run_async(run())
+
+```
+
+## 一对多
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: tortoise_orm_ex
+@Author：Sam Lau
+@file： test02.py
+@date：2023/8/22 11:53
+ """
+from tortoise import Tortoise, fields, run_async
+from tortoise.models import Model
+
+
+class Reporter(Model):
+    first_name = fields.CharField(max_length=30)
+    last_name = fields.CharField(max_length=30)
+    email = fields.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Article(Model):
+    headline = fields.CharField(max_length=100)
+    pub_date = fields.DateField()
+    reporter = fields.ForeignKeyField('models.Reporter', on_delete=fields.CASCADE)
+
+    def __str__(self):
+        return self.headline
+
+    class Meta:
+        ordering = ["headline"]
+
+
+async def run():
+    await Tortoise.init(db_url="sqlite://test002.db", modules={"models": ["__main__"]})
+    await Tortoise.generate_schemas()
+
+    r1 = await Reporter.create(first_name="John", last_name="Smith", email="john@example.com")
+
+    r2 = await Reporter.create(first_name="Paul", last_name="Jones", email="paul@example.com")
+
+    a1 = await Article.create(headline="Article 1", pub_date="2023-01-01", reporter=r1)
+
+    a2 = await Article.create(headline="Article 2", pub_date="2023-01-02", reporter=r2)
+
+
+if __name__ == '__main__':
+    run_async(run())
+```
+
+## 例子4-多对多
+
+```python
+# coding=utf-8
+"""
+@IDE：PyCharm
+@project: tortoise_orm_ex
+@Author：Sam Lau
+@file： test03.py
+@date：2023/8/22 14:30
+ """
+from tortoise import Tortoise, fields, run_async
+from tortoise.models import Model
+
+
+class Publication(Model):
+    title = fields.CharField(max_length=30)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
+class Article(Model):
+    headline = (fields.CharField(max_length=100))
+    publications = fields.ManyToManyField('models.Publication')
+
+    class Meta:
+        ordering = ["headline"]
+
+    def __str__(self):
+        return self.headline
+
+
+async def run():
+    await Tortoise.init(db_url="sqlite://test003.db", modules={"models": ["__main__"]})
+    await Tortoise.generate_schemas()
+
+    p1 = await Publication.create(title="Python")
+    p2 = await Publication.create(title="Django")
+    p3 = await Publication.create(title="Flask")
+
+    a1 = await Article.create(headline="Article 1")
+    await a1.publications.add(p1)
+
+    a2 = await  Article.create(headline="Article 2")
+
+    await  a2.publications.add(p2, p3)
+
+
+if __name__ == '__main__':
+    run_async(run())
+```
+
 # Tortoise ORM 拓展
 
 ###### [tortoise-orm 之Field的参数、属性、方法](https://www.cnblogs.com/zhongyehai/p/15182408.html)
