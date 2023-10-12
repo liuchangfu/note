@@ -2,13 +2,9 @@
 
 [feapder官方文档|feapder-document](https://feapder.com/#/README)[feapder官方文档|feapder-document](https://feapder.com/#/README)
 
-
-
 # 知识扩展--Xpath语法简介
 
 [Python爬虫必备技能，Xpath提取数据规格详解_Python新世界的博客-CSDN博客](https://blog.csdn.net/weixin_46089319/article/details/107911187?spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-107911187-blog-80672281.pc_relevant_multi_platform_whitelistv2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-107911187-blog-80672281.pc_relevant_multi_platform_whitelistv2&utm_relevant_index=4)
-
-
 
 # # 代码1
 
@@ -60,8 +56,6 @@ class AirSpiderTest(feapder.AirSpider):
 
 if __name__ == "__main__":
     AirSpiderTest().start()
-
-
 ```
 
 # 代码2
@@ -130,8 +124,6 @@ class AirSpiderTest(feapder.AirSpider):
 
 if __name__ == "__main__":
     AirSpiderTest().start()
-
-
 ```
 
 # 代码3
@@ -179,5 +171,6 @@ class AirSpiderTest(feapder.AirSpider):
 
 if __name__ == "__main__":
     AirSpiderTest().start()
-
 ```
+
+ [AirSpider使用说明](https://feapder.com/#/usage/AirSpider)

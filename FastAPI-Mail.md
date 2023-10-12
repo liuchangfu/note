@@ -94,7 +94,35 @@ async def send_file(
 # Jinja2 HTML 模板
 
 ```python
+class EmailSchema(BaseModel):
+    email: List[EmailStr]
+    body: Dict[str, Any]
 
+conf = ConnectionConfig(
+    MAIL_USERNAME = "YourUsername",
+    MAIL_PASSWORD = "strong_password",
+    MAIL_FROM = "your@email.com",
+    MAIL_PORT = 587,
+    MAIL_SERVER = "your mail server",
+    MAIL_STARTTLS = True,
+    MAIL_SSL_TLS = False,
+    TEMPLATE_FOLDER = Path(__file__).parent / 'templates',
+)
+
+
+@app.post("/email")
+async def send_with_template(email: EmailSchema) -> JSONResponse:
+
+    message = MessageSchema(
+        subject="Fastapi-Mail module",
+        recipients=email.dict().get("email"),
+        template_body=email.dict().get("body"),
+        subtype=MessageType.html,
+        )
+
+    fm = FastMail(conf)
+    await fm.send_message(message, template_name="email_template.html") 
+    return JSONResponse(status_code=200, content={"message": "email has been sent"})
 ```
 
 
