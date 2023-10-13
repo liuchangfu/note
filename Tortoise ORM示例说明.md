@@ -493,6 +493,7 @@ if __name__ == '__main__':
     run_async(run())
 ```
 
+<<<<<<< HEAD
 # # 例子3-参照Django写法
 
 ## 一对一
@@ -556,6 +557,12 @@ if __name__ == '__main__':
     run_async(run())
 ```
 
+=======
+
+
+# # 例子3-参照Django写法
+
+>>>>>>> eda7e986c742490818935b51a27ac92ca1d03eb4
 ## 一对多
 
 ```python
@@ -607,6 +614,11 @@ async def run():
 
 if __name__ == '__main__':
     run_async(run())
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> eda7e986c742490818935b51a27ac92ca1d03eb4
 ```
 
 ## 例子4-多对多
@@ -663,6 +675,10 @@ async def run():
 
 if __name__ == '__main__':
     run_async(run())
+<<<<<<< HEAD
+=======
+
+>>>>>>> eda7e986c742490818935b51a27ac92ca1d03eb4
 ```
 
 # Tortoise ORM 拓展
