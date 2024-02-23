@@ -19,8 +19,6 @@ content.to_csv('../data/中国500强.csv',encoding='utf-8', index=False)
 
 # 数据保存到数据库
 
-
-
 ```python
 import pandas as pd
 import requests
@@ -79,7 +77,6 @@ logger.info('保存成功')
 #
 # # or absolute, starting with a slash:
 # engine = create_engine("sqlite:////absolute/path/to/foo.db")
-
 ```
 
 # 保存Json格式数据
@@ -159,7 +156,6 @@ if __name__ == '__main__':
     df.to_excel(f'全国代售点详细信息_{curr_time}.xlsx', sheet_name='代售点', index=False)
     logger.info('保存成功！！！！')
     logger.info(f'请求得到的表格行数与列数->>>>>{df.shape}')
-    
 ```
 
 # 解析Json数据
@@ -516,5 +512,102 @@ df2 = pd.json_normalize(json_obj, record_path=['students'],
 # 将两个结果根据index关联起来并去除重复列
 # df1.merge(df2, how='left', left_index=True, right_index=True, suffixes=['->', '->']).T.drop_duplicates().T
 ```
+
+# 例子
+
+```python
+json_obj = {
+    "reason": "查询成功!",
+    "result": {
+        "city": "苏州",
+        "realtime": {
+            "temperature": "16",
+            "humidity": "83",
+            "info": "阴",
+            "wid": "02",
+            "direct": "东北风",
+            "power": "4级",
+            "aqi": "115"
+        },
+        "future": [
+            {
+                "date": "2023-05-22",
+                "temperature": "13/21℃",
+                "weather": "小雨转多云",
+                "wid": {
+                    "day": "07",
+                    "night": "01"
+                },
+                "direct": "北风转西北风"
+            },
+            {
+                "date": "2023-05-23",
+                "temperature": "16/26℃",
+                "weather": "多云转小雨",
+                "wid": {
+                    "day": "01",
+                    "night": "07"
+                },
+                "direct": "东风转东南风"
+            },
+            {
+                "date": "2023-05-24",
+                "temperature": "17/22℃",
+                "weather": "小雨转多云",
+                "wid": {
+                    "day": "07",
+                    "night": "01"
+                },
+                "direct": "东南风"
+            },
+            {
+                "date": "2023-05-25",
+                "temperature": "21/30℃",
+                "weather": "多云",
+                "wid": {
+                    "day": "01",
+                    "night": "01"
+                },
+                "direct": "东南风"
+            },
+            {
+                "date": "2023-05-26",
+                "temperature": "22/30℃",
+                "weather": "多云",
+                "wid": {
+                    "day": "01",
+                    "night": "01"
+                },
+                "direct": "南风转东南风"
+            }
+        ]
+    },
+    "error_code": 0
+}   
+
+
+# 获取city的值，如果city的值为一级，则可以直接获取['city']，如果是在第二级,则可以
+# [‘result’,'city']获取，record_path可以解析数据结构相同的值'result'为第一级
+# ‘future’为第二级列表的值，取值方法类似于字典取值xxx.yyy
+df1 = pd.json_normalize(json_obj,meta=[['result','city']],record_path=['result','future'])
+
+# 字段重新排序显示
+df2 = df1[['result.city','date','temperature','weather','direct','wid.day','wid.night']]
+
+# 修改列名
+df2.rename(columns={'result.city':'city','wid.day':'day','wid.night':'night'},inplace=True)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
