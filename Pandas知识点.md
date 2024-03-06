@@ -1,0 +1,47 @@
+- map：应用在单独一个Series的每个元素中，只针对单列。
+
+- apply：应用在DataFrame的行或列中，也可以应用到单独一个Series的每个元素中，针对多列，也可以单列。
+
+- applymap：应用在DataFrame的每个元素中。针对DataFrame全部元素。apply想要直接对每个元素进行操作，得单独取出serires才可以实现，不能直接在整个DataFrame上执行。
+
+- df.loc: 语法格式是df.loc[<行表达式>, <列表达式>]，如果列不传将返回所有的行，loc操作通过索引和列的条件筛选出数据
+1. 选择行：df.loc[row_index] 会选择指定行索引的数据。
+
+2. 选择多行：df.loc[[row_index1, row_index2]] 会选择多个行索引的数据。
+3. 选择行的范围（切片）：df.loc[start_row_index:end_row_index] 会选择从开始到结束行索引的数据
+
+   4.选择列：df.loc[:, column_index] 会选择指定列索引的数据。
+
+4. 选择多列：df.loc[:, [column_index1, column_index2]] 会选择多个列索引的数据。
+
+5. 选择行和列：df.loc[row_index, column_index] 会选择指定行索引和列索引的数据。
+
+6. 布尔索引：df.loc[boolean_series] 会选择布尔序列为 True 的行。
+
+df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使用数字索引（行和列的0~n索引）进行筛选数据，意味着iloc[]的表达式只支持数据切片的形式.
+
+单个整数：返回该位置对应的行
+整数列表：返回位置列表中所有位置对应的行
+整数切片：返回位置范围内的行
+
+
+
+# concat函数详解
+
+[pandas-6-详解concat函数 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/647262148)
+
+# 一文精通pandas merge
+
+[一文精通pandas merge - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/634229183)
+
+# Pandas知识点-合并操作join
+
+[Pandas知识点-合并操作join - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/385729988)
+
+# date_range()方法及频率freq的变换
+
+![【python数据分析（17）】Pandas中时间序列处理（3）时间戳索引中date_range()方法及频率freq的变换_大数据](https://s2.51cto.com/images/blog/202207/11111824_62cb96800b7d47299.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_30,g_se,x_10,y_10,shadow_20,type_ZmFuZ3poZW5naGVpdGk=/format,webp/resize,m_fixed,w_1184)
+
+[【python数据分析（17）】Pandas中时间序列处理（3）时间戳索引中date_range()方法及频率freq的变换_51CTO博客_pandas时间序列索引](https://blog.51cto.com/u_15713987/5460354)
+
+

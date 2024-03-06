@@ -598,16 +598,84 @@ df2 = df1[['result.city','date','temperature','weather','direct','wid.day','wid.
 df2.rename(columns={'result.city':'city','wid.day':'day','wid.night':'night'},inplace=True)
 ```
 
+# 接口返回数据完整的例子
 
+```python
+# https://www.hurun.net/zh-CN/Rank/HsRankDetailsList?num=16BKYYA3&search=&offset=0&limit=20
+# offset从0开始至1240,步长为20,limit为每页的记录数
+json_obj = requests.get(
+    'https://www.hurun.net/zh-CN/Rank/HsRankDetailsList?num=16BKYYA3&search=&offset=0&limit=20').json()
+json_list1 = json_obj['rows']
+json_list1
+```
 
+```py
+# 解析数据
+df3 = pd.json_normalize(json_list1, meta=['hs_Rank_Rich_ComName_Cn', 'hs_Rank_Rich_Industry_Cn', 'hs_Rank_Rich_Ranking',
+                                          'hs_Rank_Rich_Ranking_Change', 'hs_Rank_Rich_Wealth'],
+                        record_path=[['hs_Character']])
+```
 
+```py
+# 选取要显示的列
+df4 = df3[['hs_Rank_Rich_Ranking', 'hs_Rank_Rich_Ranking_Change', 'hs_Character_Fullname_Cn', 'hs_Character_Gender',
+           'hs_Character_Birthday', 'hs_Character_Age', 'hs_Rank_Rich_Wealth', 'hs_Character_Photo',
+           'hs_Character_NativePlace_Cn', 'hs_Character_BirthPlace_Cn', 'hs_Character_Permanent_Cn',
+           'hs_Character_Education_Cn', 'hs_Character_School_Cn', 'hs_Character_School_En',
+           'hs_Character_Major_Cn', 'hs_Rank_Rich_ComName_Cn', 'hs_Rank_Rich_Industry_Cn',
+           ]]
+```
 
+```python
+# hs_Character_Gender字段处理函数，如果是先生，则用M替换,否则用F替换
+def replace_gender(gender):
+    if gender == '先生':
+        return 'M'
+    else:
+        return 'F'
 
+# 用apply函数批理df4.loc['hs_Character_Gender'] = df4['hs_Character_Gender'].apply(replace_gender)
+```
 
+代码示例
 
+```python
+import pandas as pd
+from loguru import logger
+import reques
 
+# 把hs_Character_Gender先生或女士替换为F或者M
+def replace_gender(gender):
+    if gender == '先生':
+        return 'M'
+    else:
+        return 'F'
 
+# 初始化一个DataFrame
+df_all = pd.DataFrame()
+for i in range(0, 1260, 20):
+    logger.info(f'正在获取第{int(i / 20) + 1}的页数据')
+    json_obj = requests.get(
+        f'https://www.hurun.net/zh-CN/Rank/HsRankDetailsList?num=16BKYYA3&search=&offset={i}&limit=20').json()
+    json_list1 = json_obj['rows']
+    # logger.info(json_list1)
+    df1 = pd.json_normalize(json_list1,
+                            meta=['hs_Rank_Rich_ComName_Cn', 'hs_Rank_Rich_Industry_Cn', 'hs_Rank_Rich_Ranking',
+                                  'hs_Rank_Rich_Ranking_Change', 'hs_Rank_Rich_Wealth'],
+                            record_path=[['hs_Character']])
+    df2 = df1[['hs_Rank_Rich_Ranking', 'hs_Rank_Rich_Ranking_Change', 'hs_Character_Fullname_Cn', 'hs_Character_Gender',
+               'hs_Character_Birthday', 'hs_Character_Age', 'hs_Rank_Rich_Wealth', 'hs_Character_Photo',
+               'hs_Character_NativePlace_Cn', 'hs_Character_BirthPlace_Cn', 'hs_Character_Permanent_Cn',
+               'hs_Character_Education_Cn', 'hs_Character_School_Cn', 'hs_Character_School_En',
+               'hs_Character_Major_Cn', 'hs_Rank_Rich_ComName_Cn', 'hs_Rank_Rich_Industry_Cn',
+               ]]
+    logger.info(f'{df2}')
+    # 利用apply函数把hs_Character_Gender这一栏当中的先生或女士替换为F或者M
+    df2.loc[:, 'hs_Character_Gender'] = df2['hs_Character_Gender'].apply(replace_gender)
+    df3 = pd.DataFrame(df2)
+    # 合并DataFrame
+    df_all = pd.concat([df_all, df3], ignore_index=True)  
 
-
-
-
+# 保存为CSV文件
+df_all.to_csv('../data/2023_胡润排行榜.csv', encoding='utf-8', index=False)
+```
