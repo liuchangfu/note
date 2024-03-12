@@ -11,7 +11,6 @@
 - 大小写互换：`Series.str.swapcase()`
 
 - 转为小写字母(支持其他语言)：`Series.str.casefold()`
-  
 
 # 对齐方式
 
@@ -24,7 +23,6 @@
 - Series.str.ljust(width=10,size='left',fillchar='一') #指定宽度，填充内容对齐方式，填充内容
 
 - Series.str.zfill(3) # 填充对齐，不足3位的前面加0
-  
 
 # 字符拆分
 
@@ -39,7 +37,6 @@
 - Series.str.split('-',expand=True,n=1) # 限制切分次数
 
 - Series.str.rplit('-',expand=True,n=1) # 从字符串尾部向首部切分9
-  
 
 ### slice切片
 
@@ -56,7 +53,6 @@
 - Series.str.partition('-') 
 
 - Series.str.partition('-',expand=False) # 将划分的结果转为一个元组列的Series
-  
 
 # 字符替换
 
@@ -87,7 +83,6 @@ Series.str.slice_replace(start=None, stop=None, repl=None) # 替换为其他字�
 others：需要拼接的数据，该数据的长度必须跟Series对象相同
 sep ：拼接用的分隔符
 join ：连接方式，值的范围 {‘left’, ‘right’, ‘outer’, ‘inner’}
-
 
 ## 字符提取
 
@@ -123,7 +118,6 @@ flags: 正则库re中的标识，re.IGNORECASE
 na: 对缺失值填充
 regex: 是否支持正则
 
-
 ## 字符统计
 
 `Series.str.count('a') `
@@ -147,5 +141,3 @@ Series.str.istitle() # 所有是否标题格式`
 ## 文本剔除
 
 `Series.str.strip`
-
-
