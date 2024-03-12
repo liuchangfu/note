@@ -8,8 +8,9 @@
 1. 选择行：df.loc[row_index] 会选择指定行索引的数据。
 
 2. 选择多行：df.loc[[row_index1, row_index2]] 会选择多个行索引的数据。
-3. 选择行的范围（切片）：df.loc[start_row_index:end_row_index] 会选择从开始到结束行索引的数据
 
+3. 选择行的范围（切片）：df.loc[start_row_index:end_row_index] 会选择从开始到结束行索引的数据
+   
    4.选择列：df.loc[:, column_index] 会选择指定列索引的数据。
 
 4. 选择多列：df.loc[:, [column_index1, column_index2]] 会选择多个列索引的数据。
@@ -23,8 +24,6 @@ df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使�
 单个整数：返回该位置对应的行
 整数列表：返回位置列表中所有位置对应的行
 整数切片：返回位置范围内的行
-
-
 
 # concat函数详解
 
@@ -43,5 +42,17 @@ df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使�
 ![【python数据分析（17）】Pandas中时间序列处理（3）时间戳索引中date_range()方法及频率freq的变换_大数据](https://s2.51cto.com/images/blog/202207/11111824_62cb96800b7d47299.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_30,g_se,x_10,y_10,shadow_20,type_ZmFuZ3poZW5naGVpdGk=/format,webp/resize,m_fixed,w_1184)
 
 [【python数据分析（17）】Pandas中时间序列处理（3）时间戳索引中date_range()方法及频率freq的变换_51CTO博客_pandas时间序列索引](https://blog.51cto.com/u_15713987/5460354)
+
+# pandas——groupby操作
+
+[pandas——groupby操作_pandas groupby-CSDN博客](https://blog.csdn.net/AOAIYI/article/details/128994426)
+
+# pandas——字符串处理
+
+[pandas——字符串处理【建议收藏】_pandas提取字符串-CSDN博客](https://blog.csdn.net/AOAIYI/article/details/129004686)
+
+# Pandas查询数据的几种方式
+
+[Pandas查询数据的几种方式_pandas查找数据-CSDN博客](https://blog.csdn.net/qq_40703593/article/details/121176207?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-121176207-blog-129231401.235^v43^pc_blog_bottom_relevance_base5&spm=1001.2101.3001.4242.1&utm_relevant_index=1)
 
 
