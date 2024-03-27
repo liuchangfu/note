@@ -53,6 +53,14 @@ df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使�
 
 # Pandas查询数据的几种方式
 
-[Pandas查询数据的几种方式_pandas查找数据-CSDN博客](https://blog.csdn.net/qq_40703593/article/details/121176207?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-121176207-blog-129231401.235^v43^pc_blog_bottom_relevance_base5&spm=1001.2101.3001.4242.1&utm_relevant_index=1)
+[Pandas查询数据的几种方式_pandas查找数据-CSDN博客](https://blog.csdn.net/qq_40703593/article/details/121176207)
+
+[pandas基础- - wang_yb - 博客园 (cnblogs.com)](https://www.cnblogs.com/wang_yb/collections/10377)
+
+[Pandas查询选取数据_pandas查找特定值-CSDN博客](https://blog.csdn.net/qq_48391148/article/details/124674329)
+
+# pandas关于to_dict的使用
+
+[pandas关于to_dict的使用_pandas to_dict-CSDN博客](https://blog.csdn.net/qq_38060702/article/details/109843385)
 
 
