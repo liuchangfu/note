@@ -25,6 +25,18 @@ df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使�
 整数列表：返回位置列表中所有位置对应的行
 整数切片：返回位置范围内的行
 
+
+
+| 操作       | 语法              | 返回结果      | 操作逻辑         |
+| -------- | --------------- | --------- | ------------ |
+| 选择列      | `df[col]`       | Series    | 支持标签、位置（0开始） |
+| 按索引选择行   | `df.loc[label]` | Series    | 仅标签          |
+| 按数字索引选择行 | `df.iloc[loc]`  | Series    | 仅位置          |
+| 使用切片选择行  | `df[5:10]`      | DataFrame | 支持标签、位置（0开始） |
+| 用表达式筛选行  | `df[bool_vec]`  | DataFrame | 对应索引位上真值     |
+
+ 注：标签包含右则、位置（0开始）如同 Python 切片，不包含右则
+
 # concat函数详解
 
 [pandas-6-详解concat函数 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/647262148)
@@ -64,8 +76,6 @@ df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使�
 # pandas关于to_dict的使用
 
 [pandas关于to_dict的使用_pandas to_dict-CSDN博客](https://blog.csdn.net/qq_38060702/article/details/109843385)
-
-
 
 # pandas 教程
 
