@@ -6,13 +6,19 @@
 
 - 
 
-
-
 [pandas-6-详解concat函数 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/647262148)
 
 # 一文精通pandas merge
 
 [一文精通pandas merge - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/634229183)
+
+![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-28-16-40-04-image.png)
+
+![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-28-16-40-38-image.png)
+
+![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-28-16-40-47-image.png)
+
+![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-28-16-40-56-image.png)
 
 # Pandas知识点-合并操作join
 
