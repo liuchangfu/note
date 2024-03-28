@@ -27,3 +27,7 @@
 # 其他函数
 
 ![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-12-11-12-00-image.png)
+
+字符串方法
+
+![](C:\Users\SL-COM-254\AppData\Roaming\marktext\images\2024-03-28-10-32-14-image.png)
