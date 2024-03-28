@@ -4,40 +4,9 @@
 
 - applymap：应用在DataFrame的每个元素中。针对DataFrame全部元素。apply想要直接对每个元素进行操作，得单独取出serires才可以实现，不能直接在整个DataFrame上执行。
 
-- df.loc: 语法格式是df.loc[<行表达式>, <列表达式>]，如果列不传将返回所有的行，loc操作通过索引和列的条件筛选出数据
-1. 选择行：df.loc[row_index] 会选择指定行索引的数据。
-
-2. 选择多行：df.loc[[row_index1, row_index2]] 会选择多个行索引的数据。
-
-3. 选择行的范围（切片）：df.loc[start_row_index:end_row_index] 会选择从开始到结束行索引的数据
-
-4. 选择列：df.loc[:, column_index] 会选择指定列索引的数据。
-
-5. 选择多列：df.loc[:, [column_index1, column_index2]] 会选择多个列索引的数据。
-
-6. 选择行和列：df.loc[row_index, column_index] 会选择指定行索引和列索引的数据。
-
-7. 布尔索引：df.loc[boolean_series] 会选择布尔序列为 True 的行。
-
-df.iloc: 语法格式是df.iloc[<行表达式>, <列表达式>],格式可以使用数字索引（行和列的0~n索引）进行筛选数据，意味着iloc[]的表达式只支持数据切片的形式.
-
-单个整数：返回该位置对应的行
-整数列表：返回位置列表中所有位置对应的行
-整数切片：返回位置范围内的行
+- 
 
 
-
-| 操作       | 语法              | 返回结果      | 操作逻辑         |
-| -------- | --------------- | --------- | ------------ |
-| 选择列      | `df[col]`       | Series    | 支持标签、位置（0开始） |
-| 按索引选择行   | `df.loc[label]` | Series    | 仅标签          |
-| 按数字索引选择行 | `df.iloc[loc]`  | Series    | 仅位置          |
-| 使用切片选择行  | `df[5:10]`      | DataFrame | 支持标签、位置（0开始） |
-| 用表达式筛选行  | `df[bool_vec]`  | DataFrame | 对应索引位上真值     |
-
- 注：标签包含右则、位置（0开始）如同 Python 切片，不包含右则
-
-# concat函数详解
 
 [pandas-6-详解concat函数 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/647262148)
 
