@@ -6,8 +6,6 @@
 
 [fastapi配合tortoise-orm实现jwt以及rbac的教程_fastapi rbac-CSDN博客](https://blog.csdn.net/2201_75632987/article/details/136105946)
 
-
-
 一、ForeignKeyField：外键关系字段，此字段表示与另一个模型的外键关系
 
 1、model_name: str 已定义的模型的名称，必传  
@@ -20,8 +18,6 @@
 
 4、to_field：相关模型上的属性名称，用于建立外键关系。如果未设置，则使用 pk  
 5、db_constraint: bool 控制是否应在数据库中为此外键创建约束。默认值为 True，将此设置为 False 可能对数据完整性非常不利。
-
-
 
 二、ManyToManyField：多对多关系字段，此字段表示此模型与另一个模型之间的多对多
 
@@ -36,8 +32,6 @@
 　　field.SET_NULL：将字段重置为 NULL，以防相关模型被删除。仅当字段已null=True设置时才能设置。  
 　　field.SET_DEFAULT：将字段重置为default值，以防相关模型被删除。只能设置是字段有default设置。
 
-
-
 三、OneToOneField：一对一
 
 1、model_name: str 已定义的模型的名称，必传  
@@ -49,8 +43,6 @@
 　　field.SET_DEFAULT：将字段重置为default值，以防相关模型被删除。只能设置是字段有default设置。  
 4、to_field：相关模型上的属性名称，用于建立外键关系。如果未设置，则使用 pk  
 5、db_constraint: bool 控制是否应在数据库中为此外键创建约束。默认值为 True，将此设置为 False 可能对数据完整性非常不利。
-
-
 
 ### Relations
 
@@ -541,8 +533,6 @@ if __name__ == '__main__':
     run_async(run())
 ```
 
-<<<<<<< HEAD
-
 # # 例子3-参照Django写法
 
 ## 一对一
@@ -605,8 +595,6 @@ async def run():
 if __name__ == '__main__':
     run_async(run())
 ```
-
-=======
 
 # # 例子3-参照Django写法
 
@@ -841,6 +829,7 @@ class UserModel(DateTimeModel):
         table_description = "用户表"  # 数据库对该表的注释
         indexes=(("name", "password"),)  #  联合索引
         ordering = ["xxx", "-xxx"]  # 设置默认查询结果的顺序，-代表降序
+
 2.Tortoise ORM 增删改查
 1.查询
 1.使用 await 和 不使用 await 的区别
@@ -864,20 +853,15 @@ user = await UserModel.get_or_none(uuid=xxx)  # <UserModel> or None
 # 1.如果没找到数据，返回：None
 # 2.如果查询到多条数据，则抛出异常：tortoise.exceptions.MultipleObjectsReturned
 3.获取多条数据
-
 users = await UserModel.filter(name=xxx)  # [<UserModel>]
 4.获取所有数据
-
 users = await UserModel.all()  # [<UserModel>, <UserModel>, ...]
 5.获取第一条数据
-
 data = await UserModel.first()  # [<UserModel>]
 6.仅获取模型中部分的字段
-
 data_dict = await UserModel.first().values("name", "uuid")
 # 如果查询结果是单条数据：{'name': '222224', 'uuid': '35f01c8a57aa44008c99682f0eece37a'}
 # 如果查询结果是多条数据：[{'name': 'xxx', 'uuid': 'xxx'}, {'name': 'xxx', 'uuid': 'xxx'}]
-
 data_tuple = await UserModel.first().values_list("name", "uuid")  
 # 元组形式，只返回值：('222224', '35f01c8a57aa44008c99682f0eece37a')
 # 多条数据：[('222224', '35f01c8a57aa44008c99682f0eece37a'), ('xxx', 'xxx')]
@@ -896,10 +880,8 @@ data = await VirtualAppModel.first().only("name")
 
 data = await UserModel.exclude(name='111')
 9.数据去重
-
 data = await UserModel.filter(name='111').distinct()
 10.统计条数
-
 num = await UserModel.filter(name='test').count()
 # 或者
 queryset = UserModel.filter(name='test')
