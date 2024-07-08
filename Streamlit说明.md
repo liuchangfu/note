@@ -1,5 +1,7 @@
 [官网API帮助说明](https://docs.streamlit.io/)
 
+[streamlit中文开发手册（详细版）-CSDN博客](https://blog.csdn.net/weixin_44458771/article/details/135495928)
+
 Demo示例
 
 > ```python
@@ -172,7 +174,6 @@ st.markdown(
     - 探索一个 [纽约市乘车数据集](https://github.com/streamlit/demo-uber-nyc-pickups)
 """
 )
-
 ```
 
 `1_📈_Plotting_Demo.py`
@@ -324,7 +325,6 @@ except URLError as e:
     """
         % e.reason
     )
-
 ```
 
 3_📊_DataFrame_Demo.py
@@ -395,8 +395,44 @@ except URLError as e:
     """
         % e.reason
     )
-
 ```
+
+#### 配置文件
+
+配置文件的位置是 ~/.streamlit/config.toml（windows系统中为：C:\Users\Administrator\.streamlit）
+
+以下是一个config.toml示例：
+
+```toml
+[server]
+port = 8501
+enableCORS = false
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
+
+[runner]
+magicEnabled = false
+```
+
+注意：在config.toml文件中，大小写是敏感的，确保配置文件中的各个部分和参数名的大小写一致。
+
+参数：
+
+1、port：Streamlit应用的端口号，默认为 8501。
+
+2、enableCORS：是否启用跨域资源共享，默认为false。如果需要开放Streamlit应用，在非本机电脑也行访问，则需要设置为true。
+
+3、serverAddress：Streamlit服务器的地址，默认为 "localhost"。
+
+4、gatherUsageStats参数默认是true，表示允许streamlit收集使用统计信息。一般禁用就行。
+
+5、magicEnabled参数的默认值是true，表示启用Streamlit的魔法命令功能。即：任何时候如果Streamlit看到一个变量或常量值， 它就会自动将其使用st.write写入应用。所以可能容易导致网页速度变慢、重复加载数据等等情况。
+
+命令行查看streamlit配置信息：
+
+`streamlit config show`
 
 # 常用组件
 
@@ -465,9 +501,8 @@ except URLError as e:
 5.布局组件
 
 - `st.sidebar`：创建一个侧边栏。
+
 - `st.expander('标题')`：创建一个可展开的区域。
-
-
 
 - 缓存数据：使用 `st.cache` 装饰器可以缓存函数的输出，以提高应用程序的性能。
 
@@ -476,5 +511,3 @@ except URLError as e:
 - 状态管理：使用 `st.session_state` 可以跨会话管理状态。
 
 - 异步更新：使用 `st.experimental_asyncio` 可以实现异步更新应用程序的功能。
-
-
