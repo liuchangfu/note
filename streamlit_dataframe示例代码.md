@@ -659,3 +659,31 @@ st.json({
     ],
 })
 ```
+
+导航示例代码
+
+```python
+from pathlib import Path
+
+import streamlit as st
+
+dir_path = Path(__file__).parent
+
+
+def run():
+    page = st.navigation(
+        [
+            st.Page(dir_path / "Hello.py"),
+            st.Page(dir_path / "Animation_Demo.py"),
+            st.Page(dir_path / "Plotting_Demo.py"),
+            st.Page(dir_path / "Mapping_Demo.py"),
+            st.Page(dir_path / "Dataframe_Demo.py"),
+        ]
+    )
+
+    page.run()
+
+
+if __name__ == "__main__":
+    run()
+```
