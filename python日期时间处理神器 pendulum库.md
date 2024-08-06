@@ -41,7 +41,7 @@ formatted_time = dt_obj.format('%Y-%m-%d %H:%M:%S')
 print(formatted_time)
 ```
 
-# 3.字串串转 日期 日期时间类型
+# 3.字符串转日期时间类型
 
 ```python
 import pendulum
