@@ -84,5 +84,18 @@ y2
 ```
 
 ```py
-
+# 生成柱状图
+c = (
+    Bar()
+    .add_xaxis(x2)
+    .add_yaxis("Buick门店数量", y2)
+    .set_global_opts(
+        title_opts=opts.TitleOpts(title="Buick门店数量", subtitle="各市Buick门店数量"),
+        legend_opts=opts.LegendOpts(is_show=False),
+        xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=False)),
+        yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=False)),
+        visualmap_opts=opts.VisualMapOpts(is_show=False, ),
+    )
+)
+c.render_notebook()
 ```
