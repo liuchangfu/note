@@ -985,6 +985,167 @@ num = await UserModel.all().delete()
 num = await UserModel.filter(uuid='xxx').delete()
 ```
 
-
-
 # 
+
+最新的Fastapi中，启用lifespan方法来代替事件启动和关闭，代码示例如下：
+
+config.py
+
+```python
+import os
+from functools import partial
+
+from tortoise.contrib.fastapi import RegisterTortoise
+
+# 配置文件
+register_orm = partial(
+    RegisterTortoise,
+    db_url=os.getenv("DB_URL", "sqlite://db.sqlite3"),
+    modules={"models": ["models"]},
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
+
+
+```
+
+models.py
+
+```python
+from tortoise import fields, models
+
+# 数据模型
+
+class Users(models.Model):
+    """
+    The User model
+    """
+
+    id = fields.IntField(primary_key=True)
+    #: This is a username
+    username = fields.CharField(max_length=20, unique=True)
+    name = fields.CharField(max_length=50, null=True)
+    family_name = fields.CharField(max_length=50, null=True)
+    category = fields.CharField(max_length=30, default="misc")
+    password_hash = fields.CharField(max_length=128, null=True)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    modified_at = fields.DatetimeField(auto_now=True)
+
+    def full_name(self) -> str:
+        """
+        Returns the best name
+        """
+        if self.name or self.family_name:
+            return f"{self.name or ''} {self.family_name or ''}".strip()
+        return self.username
+
+    class PydanticMeta:
+        computed = ["full_name"]
+        exclude = ["password_hash"]
+
+
+```
+
+router.py
+
+```python
+from typing import List
+from fastapi import APIRouter, HTTPException
+from models import Users
+from schemas import Status, User_Pydantic, UserIn_Pydantic
+
+# 接口相关，接口的相关数据库操作还可以单独写成一个py文件
+
+router = APIRouter()
+
+
+@router.get("/users", response_model=List[User_Pydantic])
+async def get_users():
+    return await User_Pydantic.from_queryset(Users.all())
+
+
+@router.post("/users", response_model=User_Pydantic)
+async def create_user(user: UserIn_Pydantic):
+    user_obj = await Users.create(**user.model_dump(exclude_unset=True))
+    return await User_Pydantic.from_tortoise_orm(user_obj)
+
+
+@router.get("/user/{user_id}", response_model=User_Pydantic)
+async def get_user(user_id: int):
+    return await User_Pydantic.from_queryset_single(Users.get(id=user_id))
+
+
+@router.put("/user/{user_id}", response_model=User_Pydantic)
+async def update_user(user_id: int, user: UserIn_Pydantic):
+    await Users.filter(id=user_id).update(**user.model_dump(exclude_unset=True))
+    return await User_Pydantic.from_queryset_single(Users.get(id=user_id))
+
+
+@router.delete("/user/{user_id}", response_model=Status)
+async def delete_user(user_id: int):
+    deleted_count = await Users.filter(id=user_id).delete()
+    if not deleted_count:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+    return Status(message=f"Deleted user {user_id}")
+
+
+```
+
+main.py
+
+```python
+# pylint: disable=E0611,E0401
+import os
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
+
+from fastapi import FastAPI
+from routers import router as users_router
+
+from examples.fastapi.config import register_orm
+from tortoise import Tortoise, generate_config
+from tortoise.contrib.fastapi import RegisterTortoise
+
+# 程序入口文件，
+@asynccontextmanager
+async def lifespan_test(app: FastAPI) -> AsyncGenerator[None, None]:
+    config = generate_config(
+        os.getenv("TORTOISE_TEST_DB", "sqlite://:memory:"),
+        app_modules={"models": ["models"]},
+        testing=True,
+        connection_label="models",
+    )
+    async with RegisterTortoise(
+        app=app,
+        config=config,
+        generate_schemas=True,
+        add_exception_handlers=True,
+        _create_db=True,
+    ):
+        # db connected
+        yield
+        # app teardown
+    # db connections closed
+    await Tortoise._drop_databases()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    if getattr(app.state, "testing", None):
+        async with lifespan_test(app) as _:
+            yield
+    else:
+        # app startup
+        async with register_orm(app):
+            # db connected
+            yield
+            # app teardown
+        # db connections closed
+
+
+app = FastAPI(title="Tortoise ORM FastAPI example", lifespan=lifespan)
+app.include_router(users_router, prefix="")
+
+
+
+```
