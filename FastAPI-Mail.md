@@ -124,5 +124,3 @@ async def send_with_template(email: EmailSchema) -> JSONResponse:
     await fm.send_message(message, template_name="email_template.html") 
     return JSONResponse(status_code=200, content={"message": "email has been sent"})
 ```
-
-
