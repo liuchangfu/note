@@ -1,6 +1,4 @@
-
-
-代码示例
+# 代码示例
 
 ```python
 # pylint: disable=E0611,E0401
@@ -54,8 +52,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(title="Tortoise ORM FastAPI example", lifespan=lifespan)
 app.include_router(users_router, prefix="")
 ```
-
-
 
 # 应用启动和关闭事件(新版本)
 
