@@ -1005,8 +1005,6 @@ register_orm = partial(
     generate_schemas=True,
     add_exception_handlers=True,
 )
-
-
 ```
 
 models.py
@@ -1042,8 +1040,6 @@ class Users(models.Model):
     class PydanticMeta:
         computed = ["full_name"]
         exclude = ["password_hash"]
-
-
 ```
 
 router.py
@@ -1087,8 +1083,6 @@ async def delete_user(user_id: int):
     if not deleted_count:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     return Status(message=f"Deleted user {user_id}")
-
-
 ```
 
 main.py
@@ -1145,7 +1139,4 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 app = FastAPI(title="Tortoise ORM FastAPI example", lifespan=lifespan)
 app.include_router(users_router, prefix="")
-
-
-
 ```

@@ -16,15 +16,15 @@
 
 在下面的表格中，列出一些路径表达式以及表达式的结果：
 
-| 路径表达式               | 结果                                                   |
-| ------------------- | ---------------------------------------------------- |
-| bookstore           | 选取bookstore元素                                        |
-| /bookstore          | 选取根元素bookstore。注释：假如路径起始于(/)，则此路径始终代表到某元素的绝对路径。      |
-| bookstore/book      | 取属于bookstore的子元素的所有book元素。                           |
-| //book              | 选取所有book子元素，而不管他们在文档中的位置。                            |
-| bookstore//book     | 选择属于bookstore元素的后代的所有book元素，而不管它们位于bookstore之下的什么位置。 |
-| //book/title/@lang  | 选择所有的book下面的title中的lang属性的值。                         |
-| //book/title/text() | 选择所有的book下面的title的文本。                                |
+| 路径表达式               | 结果                                                                 |
+| ------------------- | ------------------------------------------------------------------ |
+| bookstore           | 选取bookstore元素                                                      |
+| /bookstore          | 选取根元素bookstore。注释：假如路径起始于(/)，则此路径始终代表到某元素的绝对路径。                    |
+| bookstore/book      | 取属于bookstore的子元素的所有book元素。                                         |
+| //book              | 选取所有book子元素，而不管他们在文档中的位置。                                          |
+| bookstore//book     | 选择属于bookstore元素的后代的所有book元素，而不管它们位于bookstore之下的什么位置。               |
+| //book/title/@lang  | 选择所有的book下面的title中的lang属性的值.(如：//div[@class="imgarea"]/a/img/@src) |
+| //book/title/text() | 选择所有的book下面的title的文本。                                              |
 
 ## 查找特定的节点
 
@@ -70,6 +70,6 @@ Path通配符可用来选取未知的XML元素。
 
 | 路径表达式                            | 结果                                                |
 | -------------------------------- | ------------------------------------------------- |
-| //book/title \| //book/price     | 选取book元素的所有title和price元素。                         |
-| //title \| //price               | 选取文档中的所有title和price元素。                            |
+| //book/title\|//book/price       | 选取book元素的所有title和price元素。                         |
+| //title\|//price                 | 选取文档中的所有title和price元素。                            |
 | /bookstore/book/title \| //price | 选取属于bookstore元素的book元素的所有title元素，以及文档中所有的price元素。 |
